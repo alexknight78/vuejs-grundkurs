@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VUE Task Challenge</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Tasks (offen {{openTaskCount}})</h1>
+      <div>
+        <input type="text" v-model="newTask" @keyup.enter="addTask" />
+        <button type="button" @click="addTask">Task hinzufügen</button>
+      </div>
+      <ul v-if="!loading">
+        <li v-for="(task, index) in tasks" :key="index">
+          <input type="checkbox" v-model="task.completed" />
+          {{ task.name }}
+          <button type="button" @click="delTask(index)">X</button>
+        </li>
+      </ul>
+      <ul v-else>
+        <li>wird geladen....</li>
+      </ul>
+    </div>
+    <script type="module">
+      import { createApp, ref, computed, reactive, onMounted, watch } from './js/vue.esm-browser.js'
+
+      createApp({
+        setup() {
+          const loading = ref(false)
+
+          const newTask = ref('')
+          const tasks = reactive([])
+
+          const addTask = () => {
+            if (newTask.value !== '') {
+              tasks.push({ name: newTask.value, completed: false })
+              setTasksToLS(tasks)
+              newTask.value = ''
+            }
+          }
+
+          const delTask = (index) => {
+            tasks.splice(index, 1)
+            tasks.length === 0 ? localStorage.removeItem('tasks') : setTasksToLS(tasks)
+          }
+
+          const setTasksToLS = (allTasks) => {
+            localStorage.setItem('tasks', JSON.stringify(allTasks))
+          }
+
+          const openTaskCount = computed(() => {
+            return tasks.filter((task) => !task.completed).length
+          })
+
+          onMounted(() => {
+            if (localStorage.getItem('tasks') !== null) {
+              // JSON.parse(localStorage.getItem('tasks')).forEach((task) => {
+              //   tasks.push(task)
+              // })
+              tasks.push(...JSON.parse(localStorage.getItem('tasks')))
+            }
+          })
+
+          watch(tasks, (newTasks) => {
+            localStorage.setItem('tasks', JSON.stringify(tasks))
+          })
+
+          return {
+            loading,
+            newTask,
+            tasks,
+            addTask,
+            delTask,
+            openTaskCount
+          }
+        }
+      }).mount('#app')
+    </script>
+  </body>
+</html>

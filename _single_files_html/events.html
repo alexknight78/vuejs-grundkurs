@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <input type="text" v-model="infoText" @keyup.enter.prevent="alertMessage" />
+      <button @click.right.prevent="fuInfos" @click.left="fuInfos">Display Info</button>
+      <button @click="fuMoreInfos('Übrigens', $event)">Display More Info</button>
+      <p>Info {{infos}}</p>
+      <p>More Infos {{moreInfos}}</p>
+      <a href="../../" @click.prevent>Click disbale</a>
+    </div>
+    <script type="module">
+      import { createApp, ref } from './js/vue.esm-browser.js'
+
+      createApp({
+        setup() {
+          const infoText = ref('')
+          const infos = ref('')
+          const moreInfos = ref('')
+
+          function fuInfos(event) {
+            console.log(event.target.tagName)
+          }
+
+          function fuMoreInfos(text, event) {
+            console.log(text, event)
+          }
+
+          function alertMessage() {
+            alert(infoText.value)
+          }
+
+          return {
+            infoText,
+            infos,
+            moreInfos,
+            fuInfos,
+            fuMoreInfos,
+            alertMessage
+          }
+        }
+      }).mount('#app')
+    </script>
+  </body>
+</html>

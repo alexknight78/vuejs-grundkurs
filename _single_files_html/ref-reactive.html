@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <button @click="increment1">hochzählen</button>
+      <p>Unser erster Zähler: {{ state1 }}</p>
+      <button @click="increment2">hochzählen</button>
+      <p>Unser zweiter Zähler: {{ state2.count }} {{ state2.text }}</p>
+      <button @click="increment3">hochzählen</button>
+      <p>Unser zweiter Zähler: {{ state3.count }} {{ state3.text }}</p>
+      <h2>{{testComputed}}</h2>
+    </div>
+    <script type="module">
+      import { createApp, ref, computed, reactive } from './js/vue.esm-browser.js'
+
+      createApp({
+        setup() {
+          const state1 = ref(0)
+          const increment1 = () => {
+            state1.value++
+          }
+
+          const state2 = reactive({
+            count: 0,
+            text: ''
+          })
+          const increment2 = () => {
+            state2.count++
+            state2.count > 10 ? (state2.text = 'es reicht...') : ''
+          }
+
+          const state3 = ref({
+            count: 1,
+            text: ''
+          })
+
+          const increment3 = () => {
+            state3.value.count++
+            state3.value.count > 5 ? (state3.value.text = 'es reicht...') : ''
+          }
+
+          const testComputed = computed(() => {
+            return state1.value + state2.count + state3.value.count
+          })
+
+          return {
+            state1,
+            state2,
+            state3,
+            increment1,
+            increment2,
+            increment3,
+            testComputed
+          }
+        }
+      }).mount('#app')
+    </script>
+  </body>
+</html>

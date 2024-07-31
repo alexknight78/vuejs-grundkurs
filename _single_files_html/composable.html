@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <p v-for="(item, index) in todos" :key="index">{{ item }}</p>
+    </div>
+    <script type="module">
+      import { createApp, ref, computed, reactive } from './js/vue.esm-browser.js'
+      import useApi from './js/useComposable.js'
+      createApp({
+        setup() {
+          const { todos, getAll: getIt } = useApi()
+          getIt()
+          return {
+            todos
+          }
+        }
+      }).mount('#app')
+    </script>
+  </body>
+</html>

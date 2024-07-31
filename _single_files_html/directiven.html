@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VUE DIREKTIVEN</title>
+  </head>
+  <body>
+    <div id="app">
+      <ul>
+        <li v-for="(item, index) in recipes" :key="index">
+          Index: {{index+1}} Name: {{item.name}}, Zutat: {{item.zutat}}
+        </li>
+      </ul>
+      <!-- destrukturieren -->
+      <ul>
+        <li v-for="({name, zutat}, index) in recipes" :key="index">
+          Index: {{index+1}} Name: {{name}}, Zutat: {{zutat}}
+        </li>
+      </ul>
+    </div>
+    <script type="module">
+      import { createApp, ref, computed, reactive } from './js/vue.esm-browser.js'
+
+      createApp({
+        setup() {
+          const recipes = ref([
+            { name: 'Gin&Tonic', zutat: 'Gin' },
+            { name: 'Wodka&Cola', zutat: 'Wodka' }
+          ])
+          return {
+            recipes
+          }
+        }
+      }).mount('#app')
+    </script>
+  </body>
+</html>
+<!-- weitere 
+ 
+v:on = @
+v-bind = :
+v-model = tow way bind
+v-slot
+v-pre = keine Kompilation - nützl zur Ausgabe von {{}}
+v-once = nur einmal rendern
+-->

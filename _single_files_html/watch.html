@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <p>Stell eine Ja / Nein Frage!</p>
+      <input type="text" v-model="question" />
+      <input type="text" v-model="answer" />
+    </div>
+    <script type="module">
+      import { createApp, ref, watch } from './js/vue.esm-browser.js'
+
+      createApp({
+        setup() {
+          const question = ref('')
+          const answer = ref('')
+
+          watch(question, (newQuestion) => {
+            if (newQuestion.indexOf('?') > -1) {
+              answer.value = '?'
+            } else {
+              answer.value = 'trigger'
+            }
+          })
+          return {
+            question,
+            answer
+          }
+        }
+      }).mount('#app')
+    </script>
+  </body>
+</html>
