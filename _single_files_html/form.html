@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .textarea {
+        white-space: pre-line;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <!-- two way binding -->
+      <input type="text" v-model.trim="message" />
+      <p>{{message}}</p>
+      <hr />
+      <!-- erst beim verlassen -->
+      <textarea rows="5" v-model.lazy="textarea"></textarea>
+      <p class="textarea">{{textarea}}</p>
+      <hr />
+      <p>
+        <input
+          type="checkbox"
+          id="checkbox"
+          v-model="checkbox"
+          true-value="ja"
+          false-value="nein"
+        />
+        <label for="checkbox">Klick mich an {{checkbox}}</label>
+      </p>
+      <p>
+        <input type="checkbox" id="red" v-model="colors" value="red" />
+        <label for="red">Klick mich an red</label>
+      </p>
+      <p>
+        <input type="checkbox" id="blue" v-model="colors" value="blue" />
+        <label for="blue">Klick mich an blue</label>
+      </p>
+      <p>gewählt: {{colors}}</p>
+      <hr />
+      <select id="selection" v-model="selection">
+        <option value="">Bitte wählen</option>
+        <option value="Ja">Ja</option>
+        <option value="Nein">Nein</option>
+        <option value="Vielleicht">Vielleicht</option>
+      </select>
+      <p>gewählt: {{selection}}</p>
+      <form @submit.prevent="submitForm" novalidate>
+        <p>
+          <input type="text" id="persName" v-model="persName" /> <label for="persName">Name</label>
+        </p>
+        <p>
+          <input type="text" id="persMail" v-model="persMail" /> <label for="persMail">Mail</label>
+        </p>
+        <button type="submit" id="submit">Absenden</button>
+        <p style="background-color: red">{{msgAlert}}</p>
+      </form>
+    </div>
+    <script type="module">
+      import { createApp, ref, computed, reactive } from './js/vue.esm-browser.js'
+
+      createApp({
+        setup() {
+          const message = ref('')
+          const textarea = ref('')
+          const checkbox = ref('')
+          const colors = ref([])
+          const selection = ref('')
+
+          // form
+          const persName = ref('')
+          const persMail = ref('')
+          const msgAlert = ref('')
+
+          const submitForm = () => {
+            console.log('Submit')
+          }
+
+          return {
+            message,
+            textarea,
+            checkbox,
+            colors,
+            selection,
+            persName,
+            persMail,
+            msgAlert,
+            submitForm
+          }
+        }
+      }).mount('#app')
+    </script>
+  </body>
+</html>

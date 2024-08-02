@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kapitel 02 Components</title>
+    <style>
+      .alert {
+        background-color: red;
+      }
+      .warning {
+        background-color: yellow;
+      }
+      .green {
+        background-color: green;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Komponenten</h1>
+      <simple-button :initial="4"></simple-button>
+      <!-- <simple-button></simple-button> -->
+      <simple-button-id type="alert" vali="ja">doch <em>mich</em>mal</simple-button-id>
+      <simple-button-id vali="nein">
+        <template #prefix></template>
+      </simple-button-id>
+      <simple-button-id vali="nein" :initial="4">klack</simple-button-id>
+      <hr />
+      <list-ul></list-ul>
+    </div>
+
+    <!-- template per const und id -->
+    <script type="text/x-template" id="simple-button-id">
+      <button @click="countUp" :class="type">
+        <slot name="prefix">+</slot>
+        <slot>default</slot> {{count}}</button>
+    </script>
+
+    <!-- template verschachtelt -->
+    <script type="text/x-template" id="list-ul-temp">
+      <ul>
+        <list-li v-for="(entry, index) in entries" :name="entry"></list-li>
+      </ul>
+    </script>
+
+    <script type="text/x-template" id="list-li-temp">
+      <li>{{name}}</li>
+    </script>
+
+    <script type="module">
+      import { createApp, ref } from './js/vue.esm-browser.js'
+      import SimpleButton from './js/SimpleButton.js'
+      const ListLi = {
+        template: '#list-li-temp',
+        props: {
+          name: String
+        }
+      }
+      const ListUl = {
+        template: '#list-ul-temp',
+        components: {
+          ListLi
+        },
+        setup() {
+          const entries = ref(['A', 'B', 'C'])
+
+          return {
+            entries
+          }
+        }
+      }
+
+      const SimpleButtonId = {
+        template: '#simple-button-id',
+        props: {
+          text: { type: String },
+          type: { type: String, default: 'green' },
+          vali: {
+            type: String,
+            validator(value) {
+              return ['ja', 'nein'].includes(value)
+            }
+          },
+          initial: {
+            type: Number,
+            default: 0
+          }
+        },
+        setup(props) {
+          const count = ref(props.initial)
+          function countUp() {
+            count.value++
+          }
+          return {
+            count,
+            countUp
+          }
+        }
+      }
+      createApp({
+        components: {
+          // SimpleButton: {
+          //   template: '<button> Klick mich </button>'
+          // },
+          SimpleButton,
+          SimpleButtonId,
+          ListUl,
+          ListLi
+        }
+      }).mount('#app')
+    </script>
+  </body>
+</html>

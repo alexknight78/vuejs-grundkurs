@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kapitel 02 Components</title>
+    <style>
+      .alert {
+        background-color: red;
+      }
+      .warning {
+        background-color: yellow;
+      }
+      .green {
+        background-color: green;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Komponenten</h1>
+      <simple-button :initial="4"></simple-button>
+      <!-- <simple-button></simple-button> -->
+      <simple-button-id text="klick" type="alert" vali="ja"></simple-button-id>
+      <simple-button-id text="klicker" vali="nein"></simple-button-id>
+      <simple-button-id text="initial" vali="nein" :initial="4"></simple-button-id>
+    </div>
+    <!-- template per const und id -->
+    <script type="text/x-template" id="simple-button-id">
+      <button @click="countUp" :class="type">{{text}} {{count}}</button>
+    </script>
+    <script type="module">
+      import { createApp, ref } from './js/vue.esm-browser.js'
+      import SimpleButton from './js/SimpleButton.js'
+      const SimpleButtonId = {
+        template: '#simple-button-id',
+        props: {
+          text: { type: String, required: true },
+          type: { type: String, default: 'green' },
+          vali: {
+            type: String,
+            validator(value) {
+              return ['ja', 'nein'].includes(value)
+            }
+          },
+          initial: {
+            type: Number,
+            default: 0
+          }
+        },
+        setup(props) {
+          const count = ref(props.initial)
+          function countUp() {
+            count.value++
+          }
+          return {
+            count,
+            countUp
+          }
+        }
+      }
+      createApp({
+        components: {
+          // SimpleButton: {
+          //   template: '<button> Klick mich </button>'
+          // },
+          SimpleButton,
+          SimpleButtonId
+        }
+      }).mount('#app')
+    </script>
+  </body>
+</html>

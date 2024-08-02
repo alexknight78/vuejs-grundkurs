@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kapitel 02 Components Custom Events</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1 :style="{ fontSize: sizeFont + 'px' }">Komponenten Custom Events Font {{sizeText}}</h1>
+      <simple-button-event :initial="sizeFont" @set-size="sizeUpDown"></simple-button-event>
+    </div>
+    <script type="module">
+      import { createApp, ref } from './js/vue.esm-browser.js'
+      import SimpleButtonEvent from './js/SimpleButtonEvent.js'
+
+      createApp({
+        components: {
+          SimpleButtonEvent
+        },
+        setup() {
+          const sizeFont = ref(30)
+          const sizeText = ref('')
+
+          function sizeUpDown(size, text) {
+            sizeFont.value = size
+            sizeText.value = text
+          }
+          return {
+            sizeFont,
+            sizeText,
+            sizeUpDown
+          }
+        }
+      }).mount('#app')
+    </script>
+  </body>
+</html>

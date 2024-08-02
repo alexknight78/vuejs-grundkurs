@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Provid Inject Komponenten</h1>
+      <child-component></child-component>
+    </div>
+
+    <script type="text/x-template" id="child-component-temp">
+      <div>
+          <h2>Child Komponente</h2>
+          <grand-child-component></grand-child-component>
+      </div>
+    </script>
+
+    <script type="text/x-template" id="grand-child-component-temp">
+      <div>
+          <p>Grand Child Message:  {{message}}</p>
+      </div>
+    </script>
+
+    <script type="module">
+      import { createApp, ref, provide, inject } from './js/vue.esm-browser.js'
+      const GrandChildComponent = {
+        template: '#grand-child-component-temp',
+        setup() {
+          const message = inject('message')
+          return { message }
+        }
+      }
+
+      const ChildComponent = {
+        template: '#child-component-temp',
+        components: {
+          GrandChildComponent
+        }
+      }
+
+      createApp({
+        components: {
+          ChildComponent
+        },
+        setup() {
+          provide('message', 'Hallo du da')
+        }
+      }).mount('#app')
+    </script>
+  </body>
+</html>
